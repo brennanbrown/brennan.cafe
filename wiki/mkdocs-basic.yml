@@ -1,0 +1,85 @@
+site_name: brennan.page Wiki
+site_description: Documentation for brennan.page homelab infrastructure
+site_author: Brennan Brown
+site_url: https://wiki.brennan.page
+
+# Repository
+repo_name: brennanbrown/brennan.page
+repo_url: https://github.com/brennanbrown/brennan.page
+
+# Theme configuration
+theme:
+  name: mkdocs
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: Table of Contents
+
+# Navigation structure
+nav:
+  - Home:
+    - index.md
+  - Infrastructure:
+    - infrastructure/index.md
+    - Docker:
+        - infrastructure/docker/index.md
+    - Networking:
+        - infrastructure/networking/index.md
+    - Security:
+        - infrastructure/security/index.md
+    - Storage:
+        - infrastructure/storage/index.md
+  - Services:
+    - services/index.md
+    - Caddy:
+        - services/caddy/index.md
+    - PostgreSQL:
+        - services/postgresql/index.md
+    - Portainer:
+        - services/portainer/index.md
+    - Monitor:
+        - services/monitor/index.md
+    - FileBrowser:
+        - services/filebrowser/index.md
+    - Vikunja:
+        - services/vikunja/index.md
+    - HedgeDoc:
+        - services/hedgedoc/index.md
+    - Linkding:
+        - services/linkding/index.md
+    - Navidrome:
+        - services/navidrome/index.md
+  - Deployments:
+    - deployments/index.md
+    - Phase 3 Progress:
+        - deployments/phase-3-progress/index.md
+  - Operations:
+    - operations/index.md
+    - Phase 2 Summary:
+        - operations/phase-2-summary/index.md
+  - Troubleshooting:
+    - troubleshooting/index.md
+    - Monitoring Issues:
+        - troubleshooting/monitoring-issues/index.md
+  - Configuration:
+    - configuration/index.md
+  - Reference:
+    - reference/index.md
+    - SSH Commands:
+        - reference/ssh-commands.md
+
+# Copyright
+copyright: |
+  &copy; 2026 Brennan Brown

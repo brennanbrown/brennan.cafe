@@ -1,0 +1,146 @@
+site_name: brennan.page Wiki
+site_description: Documentation for brennan.page homelab infrastructure
+site_author: Brennan Brown
+site_url: https://wiki.brennan.page
+
+# Repository
+repo_name: brennanbrown/brennan.page
+repo_url: https://github.com/brennanbrown/brennan.page
+
+# Theme configuration
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+  palette:
+    # Light mode
+    - scheme: default
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: JetBrains Mono
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+  - git-revision-date-localized:
+      type: datetime
+      timezone: America/Toronto
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: Table of Contents
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: brennanbrown
+      repo: brennan.page
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Navigation structure
+nav:
+  - Home:
+    - index.md
+  - Infrastructure:
+    - infrastructure/index.md
+    - Docker:
+        - infrastructure/docker/index.md
+    - Networking:
+        - infrastructure/networking/index.md
+    - Security:
+        - infrastructure/security/index.md
+    - Storage:
+        - infrastructure/storage/index.md
+  - Services:
+    - services/index.md
+    - Caddy:
+        - services/caddy/index.md
+    - PostgreSQL:
+        - services/postgresql/index.md
+    - Portainer:
+        - services/portainer/index.md
+    - Monitor:
+        - services/monitor/index.md
+    - FileBrowser:
+        - services/filebrowser/index.md
+    - Vikunja:
+        - services/vikunja/index.md
+    - HedgeDoc:
+        - services/hedgedoc/index.md
+    - Linkding:
+        - services/linkding/index.md
+    - Navidrome:
+        - services/navidrome/index.md
+  - Deployments:
+    - deployments/index.md
+    - Phase 3 Progress:
+        - deployments/phase-3-progress/index.md
+  - Operations:
+    - operations/index.md
+    - Phase 2 Summary:
+        - operations/phase-2-summary/index.md
+  - Troubleshooting:
+    - troubleshooting/index.md
+    - Monitoring Issues:
+        - troubleshooting/monitoring-issues/index.md
+  - Configuration:
+    - configuration/index.md
+  - Reference:
+    - reference/index.md
+    - SSH Commands:
+        - reference/ssh-commands.md
+
+# Copyright
+copyright: |
+  &copy; 2026 Brennan Brown -
+  <a href="#__consent">Change Cookie Settings</a>

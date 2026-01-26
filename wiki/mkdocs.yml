@@ -1,0 +1,177 @@
+site_name: brennan.page Wiki
+site_description: Documentation for brennan.page homelab infrastructure
+site_author: Brennan Brown
+site_url: https://wiki.brennan.page
+
+# Repository
+repo_name: brennanbrown/brennan.page
+repo_url: https://github.com/brennanbrown/brennan.page
+
+# Theme configuration
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+  palette:
+    # Light mode
+    - scheme: default
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: JetBrains Mono
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+  - git-revision-date-localized:
+      type: datetime
+      timezone: America/Toronto
+      fallback_to_build_date: true
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      title: Table of Contents
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: brennanbrown
+      repo: brennan.page
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Navigation structure
+nav:
+  - Home:
+    - home/index.md
+    - Getting Started: home/getting-started.md
+  - About:
+    - about/index.md
+    - Project Specification: about/spec-sheet.md
+  - Infrastructure:
+    - infrastructure/index.md
+    - Basic Server Information: infrastructure/basic-info.md
+    - Docker: infrastructure/docker.md
+    - Networking: infrastructure/networking.md
+    - Security: infrastructure/security.md
+    - Storage: infrastructure/storage.md
+  - Services:
+    - services/index.md
+    - Services Home: services/home.md
+    - Infrastructure Services:
+      - Caddy: services/caddy.md
+      - PostgreSQL: services/postgresql.md
+      - MariaDB: services/mariadb.md
+    - Management Services:
+      - Portainer: services/portainer.md
+      - FileBrowser: services/filebrowser.md
+      - Monitor: services/monitor.md
+    - Productivity Services:
+      - Vikunja: services/vikunja.md
+      - HedgeDoc: services/hedgedoc.md
+      - Linkding: services/linkding.md
+      - Navidrome: services/navidrome.md
+    - Content & Community Services:
+      - WriteFreely: services/writefreely.md
+      - Flarum: services/flarum.md
+      - FreshRSS: services/freshrss.md
+  - Configuration:
+    - configuration/index.md
+    - Environment Variables: configuration/environment-variables.md
+    - Port Mappings: configuration/port-mappings.md
+    - Resource Limits: configuration/resource-limits.md
+    - SSL Certificates: configuration/ssl-certificates.md
+  - Operations:
+    - operations/index.md
+    - Wiki Management: operations/wiki-management.md
+    - Deployment: operations/deployment.md
+    - Backups: operations/backups.md
+    - Monitoring: operations/monitoring.md
+    - Maintenance: operations/maintenance.md
+  - Troubleshooting:
+    - troubleshooting/index.md
+    - Common Issues: troubleshooting/common-issues.md
+    - SSL Certificate Issues: troubleshooting/ssl-issues.md
+    - Database Issues: troubleshooting/database-issues.md
+    - Network Issues: troubleshooting/network-issues.md
+    - Performance Issues: troubleshooting/performance-issues.md
+    - Service Issues: troubleshooting/service-issues.md
+    - HedgeDoc Issues: troubleshooting/hedgedoc-troubleshooting.md
+    - Flarum Issues: troubleshooting/flarum.md
+    - FreshRSS Issues: troubleshooting/freshrss.md
+    - WriteFreely Issues: troubleshooting/writefreely.md
+  - Reference:
+    - reference/index.md
+    - SSH Commands: reference/ssh-commands.md
+    - Docker Commands: reference/docker-commands.md
+    - Git Workflow: reference/git-workflow.md
+    - File Operations: reference/file-operations.md
+
+# Additional configuration
+extra:
+  version:
+    provider: mike
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
