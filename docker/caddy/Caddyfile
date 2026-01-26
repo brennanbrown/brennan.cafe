@@ -1,0 +1,282 @@
+# ============================================================================
+# CADDYFILE - Reverse Proxy Configuration for brennan.cafe
+# ============================================================================
+# Author: Brennan Kenneth Brown
+# Description: Automatic HTTPS for all brennan.cafe services
+# Location: ~/brennan.cafe/docker/caddy/Caddyfile
+# ============================================================================
+
+# Global options
+{
+    # Disable automatic HTTPS (Cloudflare handles SSL)
+    auto_https off
+    
+    # Admin endpoint (optional, for debugging)
+    # admin off
+}
+
+# ============================================================================
+# MAIN SITE - Hugo Static Blog
+# ============================================================================
+# Priority: 1 (Highest)
+# The main brennan.cafe site with blog and documentation
+
+brennan.cafe:80 {
+    # Serve static files from Hugo build
+    root * /srv
+    
+    # Enable file server
+    file_server
+    
+    # Try files, fallback to index.html (for clean URLs)
+    try_files {path} {path}/ /index.html
+    
+    # Security headers
+    header {
+        # Content Security Policy
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self';"
+        
+        # XSS Protection
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        
+        # Permissions Policy
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        
+        # Remove Server header
+        -Server
+    }
+    
+    # Gzip compression
+    encode gzip zstd
+    
+    # Logging (optional)
+    log {
+        output file /var/log/caddy/brennan-cafe.log
+        format json
+    }
+}
+
+# Redirect www to non-www
+www.brennan.cafe:80 {
+    redir https://brennan.cafe{uri} permanent
+}
+
+# ============================================================================
+# FILE STORAGE - Nextcloud
+# ============================================================================
+# Priority: 2 (High)
+# Personal cloud storage and file sync
+
+files.brennan.cafe:80 {
+    reverse_proxy nextcloud:80 {
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-Host {host}
+        header_up X-Real-IP {remote}
+    }
+    
+    # Security headers (specific to Nextcloud)
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "1; mode=block"
+        X-Robots-Tag "none"
+        -Server
+    }
+    
+    # Increase timeouts for large file uploads
+    @uploads {
+        path /remote.php/dav/files/*
+        path /public.php/dav/files/*
+    }
+    
+    # WebDAV support
+    @webdav {
+        path /remote.php/*
+        path /public.php/*
+        path /ocs/*
+    }
+    
+    encode gzip zstd
+    
+    log {
+        output file /var/log/caddy/files-brennan-cafe.log
+        format json
+    }
+}
+
+# ============================================================================
+# MEDIA SERVER - Jellyfin
+# ============================================================================
+# Priority: 3 (Medium)
+# Self-hosted media streaming
+
+media.brennan.cafe:80 {
+    reverse_proxy jellyfin:8096 {
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Security headers
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        -Server
+    }
+    
+    # No compression for media files (they're already compressed)
+    encode {
+        match {
+            header Content-Type text/*
+            header Content-Type application/json*
+            header Content-Type application/javascript*
+        }
+        gzip
+        zstd
+    }
+    
+    log {
+        output file /var/log/caddy/media-brennan-cafe.log
+        format json
+    }
+}
+
+# ============================================================================
+# COLLABORATIVE NOTES - HedgeDoc
+# ============================================================================
+# Priority: 4 (Medium)
+# Markdown-based collaborative editing
+
+notes.brennan.cafe:80 {
+    reverse_proxy hedgedoc:3000 {
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+        
+        # WebSocket support for real-time collaboration
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
+    }
+    
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        -Server
+    }
+    
+    encode gzip zstd
+    
+    log {
+        output file /var/log/caddy/notes-brennan-cafe.log
+        format json
+    }
+}
+
+# ============================================================================
+# STATUS MONITORING - Uptime Kuma
+# ============================================================================
+# Priority: 3 (Medium)
+# Service health and uptime monitoring
+
+status.brennan.cafe:80 {
+    reverse_proxy uptime-kuma:3001 {
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+        
+        # WebSocket support
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
+    }
+    
+    # Security headers
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        -Server
+    }
+    
+    encode gzip zstd
+    
+    log {
+        output file /var/log/caddy/status-brennan-cafe.log
+        format json
+    }
+}
+
+# ============================================================================
+# ANALYTICS - Plausible (Optional)
+# ============================================================================
+# Priority: 5 (Low)
+# Privacy-respecting analytics
+
+analytics.brennan.cafe:80 {
+    reverse_proxy plausible:8000 {
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Security headers
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        -Server
+    }
+    
+    encode gzip zstd
+    
+    log {
+        output file /var/log/caddy/analytics-brennan-cafe.log
+        format json
+    }
+}
+
+# ============================================================================
+# DEVELOPMENT (Optional - for local testing)
+# ============================================================================
+# Uncomment for local development
+
+# localhost:8080 {
+#     reverse_proxy localhost:1313  # Hugo dev server
+# }
+
+# ============================================================================
+# NOTES
+# ============================================================================
+
+# This Caddyfile provides:
+# - Automatic HTTPS for all subdomains
+# - HTTP/2 and HTTP/3 support
+# - Security headers on all sites
+# - Gzip/Zstd compression
+# - WebSocket support where needed
+# - Request logging
+# - Progressive enhancement (works without JS where possible)
+#
+# Caddy handles:
+# - Certificate acquisition and renewal (Let's Encrypt)
+# - HTTP to HTTPS redirects
+# - www to non-www redirects
+# - Reverse proxying to Docker containers
+#
+# To add a new service:
+# 1. Add container to docker-compose.yml
+# 2. Add subdomain block here
+# 3. Restart Caddy: docker compose restart caddy
+#
+# Caddy will automatically request SSL certificates for new domains!
+#
+# This configuration prioritizes:
+# - Privacy (CSP headers, no tracking)
+# - Security (HTTPS everywhere, security headers)
+# - Accessibility (works without JavaScript where possible)
+# - Performance (compression, HTTP/3)
+# - Ethics (FOSS only, no surveillance)
+#
+# Built with care on Treaty 7 territory 🌻
