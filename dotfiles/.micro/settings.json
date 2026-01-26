@@ -1,0 +1,26 @@
+{
+    "_comment_backups": "Always keep backups - safety first!",
+    "_comment_colorscheme": "Monokai is good for accessibility and low-light coding",
+    "_comment_tabs": "Using spaces (4-width) for consistency with most web projects",
+    "_comment_trailing": "Remove trailing whitespace - clean code philosophy",
+    "autosu": true,
+    "backupdir": "~/.config/micro/backups",
+    "colorscheme": "monokai",
+    "diffgutter": true,
+    "hlsearch": true,
+    "keepautoindent": true,
+    "keymenu": true,
+    "matchbraceleft": false,
+    "mkparents": true,
+    "pluginchannels": [
+        "https://raw.githubusercontent.com/micro-editor/plugin-channel/master/channel.json"
+    ],
+    "pluginrepos": [],
+    "rmtrailingws": true,
+    "savecursor": true,
+    "saveundo": true,
+    "scrollbar": true,
+    "tabmovement": true,
+    "tabstospaces": true,
+    "termtitle": true
+}
