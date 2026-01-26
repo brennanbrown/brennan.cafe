@@ -1,0 +1,35 @@
+---
+title: 'brennan.cafe'
+date: 2026-01-25T19:00:00-07:00
+draft: false
+---
+
+# 🌻 Welcome to brennan.cafe
+
+A privacy-focused, self-hosted personal infrastructure built on a ThinkPad W520.
+
+## About This Site
+
+This is my homelab documentation and blog, where I share my journey of:
+- De-Googling my digital life
+- Building ethical, privacy-respecting infrastructure
+- Learning about self-hosting and system administration
+- Embracing IndieWeb and permacomputing principles
+
+## Services
+
+- **[Blog](/posts/)** - Thoughts and tutorials
+- **[Files](https://files.brennan.cafe)** - Nextcloud file storage
+- **[Media](https://media.brennan.cafe)** - Jellyfin media server
+- **[Notes](https://notes.brennan.cafe)** - HedgeDoc collaborative notes
+- **[Status](https://status.brennan.cafe)** - Service monitoring
+
+## Contact
+
+- **Website**: [brennan.day](https://brennan.day)
+- **Email**: [mail@brennanbrown.ca](mailto:mail@brennanbrown.ca)
+- **Mastodon**: [@brennan@social.lol](https://social.lol/@brennan)
+
+---
+
+Built with 🌻 on Treaty 7 territory

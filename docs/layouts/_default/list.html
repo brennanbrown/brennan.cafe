@@ -1,0 +1,38 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+{{ if .Pages }}
+    <ul class="post-list">
+    {{ range .Pages.ByDate.Reverse }}
+        <li>
+            <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+            {{ if .Params.ReadingTime }}
+                <span class="post-length">({{ .Params.ReadingTime }} min)</span>
+            {{ end }}
+        </li>
+    {{ end }}
+    </ul>
+    <style>
+        .post-list {
+            list-style: none;
+            padding: 0;
+        }
+        .post-list li {
+            margin-bottom: 1em;
+            padding-bottom: 1em;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .post-date {
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-right: 1em;
+        }
+        .post-length {
+            color: var(--text-color);
+            opacity: 0.5;
+            font-size: 0.9em;
+        }
+    </style>
+{{ end }}
+{{ end }}

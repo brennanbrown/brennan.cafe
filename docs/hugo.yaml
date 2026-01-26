@@ -1,0 +1,150 @@
+baseURL: 'https://brennan.cafe'
+languageCode: 'en-ca'
+title: 'brennan.cafe'
+
+# SEO
+enableRobotsTXT: true
+enableEmoji: true
+
+params:
+  # Theme settings
+  env: production
+  title: 'brennan.cafe'
+  description: 'A privacy-focused, self-hosted personal infrastructure'
+  author: Brennan Brown
+  images:
+    - /images/og-image.png
+  
+  # Home page
+  profileMode:
+    enabled: true
+    title: "🌻 Welcome to brennan.cafe"
+    subtitle: "Privacy-focused, self-hosted personal infrastructure"
+    imageUrl: "/images/avatar.jpg"
+    imageTitle: "Brennan Brown"
+    imageWidth: 120
+    imageHeight: 120
+    buttons:
+      - name: Blog
+        url: posts
+      - name: Services
+        url: services
+      - name: About
+        url: about
+
+  # Social links
+  socialIcons:
+    - name: website
+      url: "https://brennan.day"
+    - name: email
+      url: "mailto:mail@brennanbrown.ca"
+    - name: mastodon
+      url: "https://social.lol/@brennan"
+    - name: github
+      url: "https://github.com/brennanbrown"
+
+  # Analytics (privacy-friendly)
+  analytics:
+    plausible:
+      domain: brennan.cafe
+      serverURL: https://analytics.brennan.cafe
+
+  # Edit post
+  editPost:
+    URL: "https://github.com/brennanbrown/brennan.cafe/tree/main/content"
+    Text: "Suggest Changes"
+    appendFilePath: true
+
+  # Theme customization
+  defaultTheme: auto
+  disableThemeToggle: false
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  ShowToc: true
+  TocOpen: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableAnchoredHeadings: false
+  hideMeta: false
+  hideSummary: false
+  showReadingTime: true
+  ShowShareButtons: true
+  ShareButtons:
+    - twitter
+    - mastodon
+    - reddit
+    - linkedin
+
+  # Labels
+  label:
+    text: "Home"
+    icon: /images/apple-touch-icon.png
+    iconHeight: 35
+
+  # Assets
+  assets:
+    disableHLJS: true
+    disableFingerprinting: false
+
+  # Cover image
+  cover:
+    hidden: true
+    hiddenInList: true
+    hiddenInSingle: true
+
+  # Fuse search
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+# Menu
+menu:
+  main:
+    - name: Blog
+      url: /posts/
+      weight: 10
+    - name: Services
+      url: /services/
+      weight: 20
+    - name: Tutorials
+      url: /tutorials/
+      weight: 30
+    - name: Projects
+      url: /projects/
+      weight: 40
+    - name: About
+      url: /about/
+      weight: 50
+
+# Markup
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    style: monokai
+
+# Privacy settings
+privacy:
+  vimeo:
+    disabled: true
+  twitter:
+    disabled: true
+  instagram:
+    disabled: true
+  youtube:
+    disabled: true
