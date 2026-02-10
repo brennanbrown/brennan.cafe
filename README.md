@@ -8,6 +8,142 @@
 
 ---
 
+## 📍 Quick Reference: Server Paths
+
+**Blog Content**: `/home/brennan/Documents/brennan.cafe/docs/content/`
+**Blog Scripts**: `/home/brennan/scripts/blog/`
+**Hugo Site (served by Caddy)**: `/home/brennan/Documents/brennan.cafe/docker/caddy/site/`
+**Docker Compose**: `/home/brennan/Documents/brennan.cafe/docker/docker-compose.yml`
+
+## 🎨 Local Development with Tailwind CSS
+
+The site uses **Tailwind CSS** for styling. To develop locally:
+
+```bash
+# Navigate to docs directory
+cd docs/
+
+# Install dependencies (first time only)
+npm install
+
+# Build the site with Tailwind CSS
+../scripts/blog/build.sh
+
+# Or build and serve locally
+../scripts/blog/build.sh serve
+
+# Watch for changes and auto-rebuild
+../scripts/blog/watch.sh
+```
+
+### Tailwind CSS Commands
+
+```bash
+# Build CSS for production
+npm run build-css
+
+# Watch CSS changes during development
+npm run watch-css
+```
+
+### Project Structure
+
+```
+docs/
+├── assets/css/
+│   ├── input.css      # Tailwind input file
+│   └── style.css      # Generated CSS (do not edit)
+├── layouts/           # Hugo templates
+├── content/           # Markdown content
+├── static/            # Static assets
+├── tailwind.config.js # Tailwind configuration
+├── package.json       # Node.js dependencies
+└── hugo.yaml         # Hugo configuration
+```
+
+---
+
+## 💻 SSH Commands
+
+### Required SSH Command Format
+
+```bash
+# Always use this format for SSH commands:
+ssh -i ~/.ssh/id_ed25519 -T -o BatchMode=yes brennan@brennan-ssh "your-command-here"
+```
+
+**Critical Flags:**
+- `-i ~/.ssh/id_ed25519` - Specifies your SSH key
+- `-T` - Disables pseudo-terminal (prevents hanging)
+- `-o BatchMode=yes` - Non-interactive mode (no password prompts)
+
+### Common Examples for AI Assistants
+
+```bash
+# Check system status
+ssh -i ~/.ssh/id_ed25519 -T -o BatchMode=yes brennan@brennan-ssh "
+  cd /home/brennan/Documents/brennan.cafe/docs
+  hugo --gc
+  ls -la public/
+"
+
+# Deploy blog
+ssh -i ~/.ssh/id_ed25519 -T -o BatchMode=yes brennan@brennan-ssh "
+  cd /home/brennan/scripts/blog
+  ./deploy.sh quick
+"
+
+# Check Docker services
+ssh -i ~/.ssh/id_ed25519 -T -o BatchMode=yes brennan@brennan-ssh "
+  cd /home/brennan/Documents/brennan.cafe/docker
+  docker compose ps
+"
+
+# Create a new blog post
+ssh -i ~/.ssh/id_ed25519 -T -o BatchMode=yes brennan@brennan-ssh "
+  cd /home/brennan/scripts/blog
+  ./new-post.sh 'New Post Title' 'homelab,tutorial'
+"
+```
+
+### File Operations
+
+```bash
+# Upload files (from local to server)
+rsync -avz -e "ssh -i ~/.ssh/id_ed25519" ./local-file brennan@brennan-ssh:/remote/path/
+
+# Download files (from server to local)
+scp -i ~/.ssh/id_ed25519 brennan@brennan-ssh:/remote/file ./local-file/
+
+# Edit files: Download → Edit → Upload
+scp -i ~/.ssh/id_ed25519 brennan@brennan-ssh:/path/to/file ./
+# [Edit the file locally]
+scp -i ~/.ssh/id_ed25519 ./file brennan@brennan-ssh:/path/to/file/
+```
+
+### ❌ NEVER Do These (Will Hang)
+
+```bash
+# DON'T - Interactive editors will hang
+ssh ... "nano file.txt"
+ssh ... "vim file.txt"
+ssh ... "micro file.txt"
+
+# DON'T - Commands that wait for input
+ssh ... "apt install package"  # Use -y flag
+ssh ... "read -p 'Input: ' var"
+```
+
+### ✅ Best Practices
+
+1. **Always use `-T -o BatchMode=yes`**
+2. **Use `-y` flag for apt commands** (`apt install -y package`)
+3. **Use full paths** when possible
+4. **Quote complex commands** with `"` or `'`
+5. **Test commands manually first** before having AI run them
+
+---
+
 ## � Remote Access
 
 ### SSH via Cloudflare Tunnel
@@ -34,6 +170,7 @@ ssh brennan-ssh
 ## 📖 Table of Contents
 
 - [Remote Access](#-remote-access)
+- [SSH Commands](#-ssh-commands)
 - [About](#-about)
 - [System Specifications](#-system-specifications)
 - [Services](#-services)
@@ -108,8 +245,47 @@ This project embodies the principles of the [IndieWeb](https://indieweb.org/), [
 #### 🌻 Main Site (brennan.cafe)
 - Static site generated with Hugo
 - Contains blog posts and homelab documentation
-- No JavaScript required (progressive enhancement)
+- Uses Simple CSS framework for clean, minimal design
+- Progressive enhancement (works without JavaScript)
 - Optimized for accessibility and performance
+- Dark mode support with system preference detection
+
+### Blog Management Workflow
+
+The blog is managed via SSH scripts located in `/home/brennan/scripts/blog/` on the server:
+
+```bash
+# SSH to server
+ssh brennan@brennan-ssh
+
+# Create a new post
+cd /home/brennan/scripts/blog
+./new-post.sh "Post Title" "tag1,tag2"
+
+# Edit a post
+./edit-post.sh "post-title" local  # Downloads, edits locally
+./edit-post.sh "post-title" remote # Edit directly on server
+
+# List all posts
+./list-posts.sh
+
+# Deploy changes
+./deploy.sh quick    # Content only
+./deploy.sh full     # Entire site
+```
+
+**Local Development** (optional):
+```bash
+# Clone repo locally
+git clone https://github.com/brennanbrown/brennan.cafe.git
+cd brennan.cafe/docs
+
+# Run Hugo dev server
+hugo server -D
+
+# Deploy from local
+../scripts/blog/deploy.sh
+```
 
 #### 📁 File Storage (Nextcloud)
 - Replace Google Drive/Dropbox
@@ -294,51 +470,70 @@ Visit each service and complete the setup:
 ## 📂 Directory Structure
 
 ```
-brennan.cafe/
-├── README.md                   # This file
-├── SETUP.md                    # Detailed setup guide
-├── CHANGELOG.md                # Version history
-├── LICENSE                     # CC BY-NC 4.0
-├── .gitignore                  # Git ignore rules
+brennan.cafe/                          # Local repository
+├── README.md                          # This file
+├── SETUP.md                           # Detailed setup guide
+├── CHANGELOG.md                       # Version history
+├── LICENSE                            # CC BY-NC 4.0
+├── .gitignore                         # Git ignore rules
 │
-├── docs/                       # Hugo static site
-│   ├── config.toml
-│   ├── content/
-│   ├── themes/
-│   └── public/                 # Built site
+├── docs/                              # Hugo static site (local)
+│   ├── hugo.yaml                      # Hugo configuration
+│   ├── content/                       # Site content
+│   │   ├── _index.md                  # Homepage
+│   │   ├── posts/                     # Blog posts
+│   │   ├── tutorials.md               # Tutorials index
+│   │   └── services.md                # Services overview
+│   ├── layouts/                       # Hugo templates
+│   │   └── _default/
+│   │       ├── baseof.html            # Base template
+│   │       ├── list.html              # List pages
+│   │       └── single.html            # Single posts
+│   ├── assets/                        # Static assets
+│   │   └── css/
+│   │       └── style.css              # Custom styles
+│   ├── archetypes/                    # Content templates
+│   │   ├── default.md                 # Default template
+│   │   └── blog.md                    # Blog post template
+│   └── public/                        # Built site (generated)
 │
-├── dotfiles/                   # System configuration
-│   ├── .bashrc
-│   ├── .bash_aliases
-│   ├── .micro/
-│   ├── .ssh/
-│   └── install.sh
+├── scripts/                           # Automation scripts
+│   ├── blog/                          # Blog management scripts
+│   │   ├── new-post.sh                # Create new posts
+│   │   ├── edit-post.sh               # Edit posts
+│   │   ├── list-posts.sh              # List all posts
+│   │   ├── deploy.sh                  # Deploy blog
+│   │   └── README.md                  # Blog scripts documentation
+│   ├── setup/                         # Initial setup
+│   ├── maintenance/                   # Regular maintenance
+│   ├── monitoring/                    # Monitoring scripts
+│   └── deployment/                    # Deployment helpers
 │
-├── scripts/                    # Automation scripts
-│   ├── setup/                  # Initial setup
-│   ├── maintenance/            # Regular maintenance
-│   ├── monitoring/             # Monitoring scripts
-│   └── deployment/             # Deployment helpers
-│
-├── docker/                     # Docker services
-│   ├── docker-compose.yml      # Main compose file
-│   ├── .env                    # Environment variables (git-ignored)
+├── docker/                            # Docker services
+│   ├── docker-compose.yml             # Main compose file
+│   ├── .env                           # Environment variables (git-ignored)
 │   ├── caddy/
 │   │   └── Caddyfile
-│   ├── nextcloud/
-│   ├── jellyfin/
-│   ├── hedgedoc/
-│   ├── uptime-kuma/
-│   └── plausible/
+│   └── [service-dirs]/                # Individual service configs
 │
-├── backups/                    # Backup configuration
-│   ├── restic/
-│   └── manual/
-│
-└── systemd/                    # Systemd services
-    ├── brennan-cafe.service
-    ├── backup.service
-    └── backup.timer
+└── dotfiles/                          # System configuration
+    ├── .bashrc
+    ├── .bash_aliases
+    ├── .ssh/
+    └── install.sh
+
+# Server Structure (Remote)
+/home/brennan/Documents/brennan.cafe/   # Server repository copy
+├── docs/                              # Hugo site source
+│   ├── content/                       # Blog content
+│   ├── layouts/                       # Templates
+│   └── public/                        # Generated Hugo site
+├── scripts/blog/                      # Blog management scripts
+└── docker/caddy/site/                 # Caddy serves from here
+    ├── index.html                     # Homepage
+    ├── posts/                         # Blog posts
+    ├── css/                           # Stylesheets
+    └── ...                            # Other static files
 ```
 
 ---
@@ -369,6 +564,10 @@ docker system prune -f
 
 # Check logs for errors
 docker compose logs --tail=100
+
+# Check blog for new comments or issues (if applicable)
+cd /home/brennan/scripts/blog
+./list-posts.sh
 ```
 
 ### Monthly Tasks
@@ -382,6 +581,31 @@ restic snapshots
 
 # Review security logs
 sudo journalctl -u fail2ban --since "1 month ago"
+
+# Blog maintenance
+cd /home/brennan/Documents/brennan.cafe/docs
+hugo --gc  # Clean up unused files
+./scripts/blog/deploy.sh full  # Full deployment
+```
+
+### Blog-Specific Tasks
+
+```bash
+# Creating new content
+cd /home/brennan/scripts/blog
+./new-post.sh "Your Post Title" "tag1,tag2,tag3"
+
+# Managing drafts
+./list-posts.sh | grep "draft"
+
+# Publishing drafts
+# Edit the post, change draft: false, then deploy
+./deploy.sh quick
+
+# Checking site build locally
+cd /home/brennan/Documents/brennan.cafe/docs
+hugo server --bind=0.0.0.0 --port=1313
+# Visit http://server-ip:1313 to preview
 ```
 
 ### Automated Tasks
@@ -440,6 +664,41 @@ docker compose restart [service-name]
 
 # Rebuild service
 docker compose up -d --force-recreate [service-name]
+```
+
+### Blog Issues
+
+#### Hugo Build Fails
+```bash
+# Check Hugo syntax
+cd /home/brennan/Documents/brennan.cafe/docs
+hugo --verbose  # Shows detailed error messages
+
+# Common issues:
+# - Missing closing braces in templates
+# - Incorrect YAML frontmatter
+# - Missing required fields
+```
+
+#### Site Not Updating
+```bash
+# Check if files are in the right place
+ls -la /home/brennan/Documents/brennan.cafe/docker/caddy/site/
+
+# Rebuild and redeploy
+cd /home/brennan/Documents/brennan.cafe/docs
+hugo --gc
+rsync -av --delete public/ /home/brennan/Documents/brennan.cafe/docker/caddy/site/
+
+# Reload Caddy
+docker compose restart caddy
+```
+
+#### Cloudflare Cache Issues
+```bash
+# Add cache-busting parameter to URLs
+# Or wait for cache to expire (typically 1-4 hours)
+# Hard refresh browser: Ctrl+Shift+R (Cmd+Shift+R on Mac)
 ```
 
 ### Can't Access Service
